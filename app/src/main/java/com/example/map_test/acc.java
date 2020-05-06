@@ -29,6 +29,7 @@ public class acc {
     }
     public void setAcc(double acc){
         //svm 계산
+        this.acc = acc;
     }
     public double getX(){
         return this.x;
