@@ -5,6 +5,7 @@ public class acc {
     private double y;
     private double z;
     private double acc;
+    private  double test;
     public acc(){
         this(0, 0, 0);
     }
