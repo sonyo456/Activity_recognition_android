@@ -2,7 +2,6 @@ package com.example.map_test;
 
 import android.util.Log;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class RFModel {
     //private final Attribute attribute_HR = new Attribute("HR");
     private final Attribute attribute_LAT = new Attribute("LAT");
     private final Attribute attribute_LON = new Attribute("LON");
-    private final Attribute attribute_MSVM = new Attribute("MSVM");
+    private final Attribute attribute_SVM = new Attribute("SVM");
     private final Attribute attribute_SPEED = new Attribute("SPEED");
     private final List<String> actClassList = new ArrayList<String>() {
         {
@@ -35,13 +34,15 @@ public class RFModel {
 //    public String result2;
     public LocationInformation location;
 
+    public Acc acc;
+
     public RFModel(){
         this.attributeList = new ArrayList<Attribute>(2) {
             {
                 //add(attribute_HR);
                 add(attribute_LAT);
                 add(attribute_LON);
-                add(attribute_MSVM);
+                add(attribute_SVM);
                 add(attribute_SPEED);
                 Attribute attributeClass = new Attribute("@@class@@", actClassList);
                 add(attributeClass);
@@ -56,7 +57,7 @@ public class RFModel {
         Log.d("actrecog", attnum+"");
 
         this.location = new LocationInformation();
-
+        this.acc = new Acc();
         //AssetManager assetManager = getAssets();
         try {
             //cls = (Classifier) weka.core.SerializationHelper.read(getAssets().open("REAL_MODEL.model"));
@@ -78,6 +79,19 @@ public class RFModel {
         this.location = locationinformation;
     }
 
+    public void setSvm(double x, double y, double z) {
+
+        this.acc.setSvm(x, y, z);
+    }
+
+    public void setSvm(Acc acc){
+        this.acc = acc;
+    }
+
+    //    public void setSvm(double svm){
+//        this.acc.setAccelerometer(x, y, z);
+//    }
+
     public String classifyActtype() {
         String acttype="";
 
@@ -92,9 +106,13 @@ public class RFModel {
                 //setValue(attribute_LON, 126.685548);
                 setValue(attribute_LON, location.getLongitude());
                 //System.out.println("MSVM 값을 입력하세요: ");
-                setValue(attribute_MSVM, 1.375729);
-                //System.out.println("SPEED 값을 입력하세요: ");
+//
+//                setValue(attribute_SVM, 0);
+
+                System.out.println( acc.getSvm());
                 setValue(attribute_SPEED,location.getSpeed());
+//                setValue(attribute_SPEED,2);
+
                 //setValue(attribute_SPEED,19.686085);
             }
         };

@@ -5,27 +5,27 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import static android.content.Context.SENSOR_SERVICE;
-
 public class accelerometer {
+    private double x,y, z, svm;
     private SensorManager sensorManager;
-    public  accelerometer(){
-       // sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
-        sensorManager.registerListener((SensorEventListener) this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-    }
+    private RFModel model;
+    private Acc acc;
 
     public void onAccuracyChanged(Sensor arg0, int arg1) {
     }
 
     public void onSensorChanged(SensorEvent event) {
-        double ax, ay, az;
-
+        double x = 0, y = 0, z = 0;
+        model = new RFModel();
         if (event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
-            ax=event.values[0];
-            ay=event.values[1];
-            az=event.values[2];
-            System.out.println("x:" + ax + "y:" + ay+"z: "+ az);
+            x = event.values[0];
+            y = event.values[1];
+            z = event.values[2];
+            acc = new Acc(x, y, z);
+            model.setSvm(acc);
+
         }
+
     }
 
 }

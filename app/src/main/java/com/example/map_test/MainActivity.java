@@ -1,15 +1,11 @@
 package com.example.map_test;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import android.Manifest;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,7 +13,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -42,11 +37,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
-//import com.google.android.material.snackbar.Snackbar;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -71,8 +66,9 @@ public class MainActivity extends AppCompatActivity
     private Location location;
     private LocationInformation locationInfo;
     private View mLayout;
-    private TextView lat, lon, speed, acttype;
+    private TextView lat, lon, speed, acttype, svm;
     private RFModel model;
+    private Acc acc;
 
     //public static double latitude, longitude, Speed;
 
@@ -80,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//asdfsdfsf
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -88,11 +84,12 @@ public class MainActivity extends AppCompatActivity
         lat = (TextView)findViewById(R.id.lat);
         lon = (TextView)findViewById(R.id.lon);
         speed = (TextView)findViewById(R.id.speed);
+        svm = (TextView)findViewById(R.id.svm);
         acttype = (TextView)findViewById(R.id.acttype);
         mLayout = findViewById(R.id.map);
 
         model = new RFModel();//클래스 호출
-
+        acc = new Acc();
         locationRequest = new LocationRequest()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)//배터리소모보다 정확도 우선
                 .setInterval(UPDATE_INTERVAL_MS)
@@ -205,11 +202,16 @@ public class MainActivity extends AppCompatActivity
                 lat.setText(String.valueOf(location.getLatitude()) + "\t ");
                 lon.setText(String.valueOf(location.getLongitude()) + "\t ");
                 speed.setText(String.valueOf(location.getSpeed())+ "\t ");
+                svm.setText(String.valueOf(acc.getSvm())+ "\t ");
+
                 model.setLocation(li);
                 String acttypeStr = model.classifyActtype();
                 acttype.setText(acttypeStr);
 
+                String test = "g";
+//                appendLog(test);
                 Log.d(TAG, "acttype: " + acttypeStr);
+                Log.d(TAG, "svm: " + acc.getSvm());
                 Log.d(TAG, "onLocationResult : " + markerSnippet);
                 //Log.d(TAG, "speed : " + getSpeed);
                 //현재 위치에 마커 생성하고 이동
@@ -501,6 +503,34 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
     }
+
+//    public void appendLog(String text){
+//        File logFile = new File("sdcard/log.file");
+//        if (!logFile.exists())
+//        {
+//            try
+//            {
+//                logFile.createNewFile();
+//            }
+//            catch (IOException e)
+//            {
+//                e.printStackTrace();
+//            }
+//        }
+//        try
+//        {
+//            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+//            System.out.print("완료");
+//            buf.append(text);
+//            buf.newLine();
+//            buf.close();
+//        }
+//        catch (IOException e)
+//        {
+//            // 적절한 예외처리를 해주면됩니다.
+//            e.printStackTrace();
+//        }
+//    }
 
 
 }
